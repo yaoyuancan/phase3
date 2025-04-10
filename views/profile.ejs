@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><%= title %></title>
+    <style>
+        #profileForm {
+            max-width: 600px;
+            margin: 2rem auto;
+            padding: 2rem;
+            background: #ffffff;
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+        }
+
+        #profileForm h2 {
+            color: #333;
+            margin-bottom: 2rem;
+            text-align: center;
+            font-size: 1.8rem;
+        }
+
+        #profileForm label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: #555;
+            font-weight: 500;
+        }
+
+        #profileForm input[type="text"],
+        #profileForm input[type="email"],
+        #profileForm textarea {
+            width: 100%;
+            padding: 0.8rem;
+            margin-bottom: 1.5rem;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 1rem;
+            transition: border-color 0.3s ease;
+        }
+
+        #profileForm input:focus,
+        #profileForm textarea:focus {
+            outline: none;
+            border-color: #4a90e2;
+            box-shadow: 0 0 5px rgba(74, 144, 226, 0.3);
+        }
+
+        #profileForm textarea {
+            resize: vertical;
+            min-height: 100px;
+        }
+
+        #profileForm button[type="submit"] {
+            width: 100%;
+            padding: 1rem;
+            background-color: #4a90e2;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        #profileForm button[type="submit"]:hover {
+            background-color: #357abd;
+        }
+
+        .error {
+            color: #dc3545;
+            font-size: 0.875rem;
+            margin-top: -1rem;
+            margin-bottom: 1rem;
+            display: block;
+        }
+    </style>
+</head>
+<body>
+
+    <a href="/blogs">Go back</a>
+    <hr/>
+    <form id="profileForm"  onsubmit="submitForm(event)">
+
+
+        <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+        <input type="hidden" id="user_id" name="user_id" value="<%=user._id%>" />
+        <h2>Update Your Profile: <%= user.username %></h2>
+    
+        <!-- Name Field -->
+        <label for="name">First Name:</label>
+        <input type="text" id="first_name" name="first_name" required minlength="3" maxlength="50" pattern="[A-Za-z\s]+" 
+            title="Name should be 3-50 alphabetic characters only" value="<%= user.first_name %>" />
+        <span id="nameError" class="error"></span>
+        <br/>
+                <!-- Name Field -->
+                <label for="name">Last Name:</label>
+                <input type="text" id="last_name" name="last_name" required minlength="3" maxlength="50" pattern="[A-Za-z\s]+" 
+                    title="Name should be 3-50 alphabetic characters only" value="<%= user.last_name %>" />
+                <span id="nameError2" class="error"></span>
+                <br/>
+        <!-- Email Field -->
+        <label for="email">Email:</label>
+        <input type="email" id="email" name="email" required 
+            title="Enter a valid email address" value="<%= user.email %>" />
+        <span id="emailError" class="error"></span>
+        <br/>
+        <!-- Bio Field -->
+        <label for="bio">Bio:</label>
+        <textarea id="bio" name="bio" rows="4" maxlength="500" 
+            placeholder="Tell us about yourself (Max 500 characters)"><%= user.bio %></textarea>
+        <span id="bioError" class="error"></span>
+        <br/>
+        <!-- Submit Button -->
+        <button type="submit">Update Profile</button>
+    </form>
+    
+    <!-- Client-side Validation Script -->
+    <script>
+
+console.log('<%= user.email %>')
+
+async function submitForm(event) {
+    event.preventDefault();
+
+    const form = document.getElementById('profileForm');
+    const csrfToken = form.querySelector('input[name="_csrf"]').value;
+
+
+    const formData = {
+    user_id:  document.getElementById('user_id').value,
+      first_name: document.getElementById('first_name').value,
+      last_name: document.getElementById('last_name').value,
+      email: document.getElementById('email').value,
+      bio: document.getElementById('bio').value
+    };
+
+    try {
+      const response = await fetch('api/update-profile', {
+        method: 'POST',
+        headers: { 
+          'Content-Type': 'application/json',
+          'CSRF-Token': csrfToken 
+        },
+        body: JSON.stringify(formData)
+      });
+
+      if (response.ok) {
+        alert('update the user profile successful')
+        window.location.href = '/blogs';
+      } else {
+        const errorData = await response.json();
+        alert(errorData.message || 'Something went wrong');
+      }
+    } catch (error) {
+      console.error('Error:', error);
+      alert('Failed to submit the form');
+    }
+  }
+    </script>
+</body>
+</html>

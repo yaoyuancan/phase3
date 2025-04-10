@@ -1,0 +1,46 @@
+.btn-add  {
+    padding: 10px 20px;
+    background-color: blue;
+    color: white;
+    border:none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.btn-disabled {
+    background-color: gray;
+    cursor:not-allowed;
+}
+
+.btn-add:disabled {
+    background-color: gray;
+    cursor:not-allowed;
+}
+
+.btn-update  {
+    padding: 10px 20px;
+    background-color: green;
+    color: white;
+    border:none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.btn-update:disabled {
+    background-color: gray;
+    cursor:not-allowed;
+}
+
+.btn-delete  {
+    padding: 10px 20px;
+    background-color: red;
+    color: white;
+    border:none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.btn-delete:disabled {
+    background-color: gray;
+    cursor:not-allowed;
+}

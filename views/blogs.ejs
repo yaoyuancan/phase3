@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>
+    <%= title%>
+  </title>
+  <link rel="stylesheet" href="/style.css">
+  <style>
+    table {
+      font-family: arial, sans-serif;
+      border-collapse: collapse;
+      width: 100%;
+    }
+
+    td,
+    th {
+      border: 1px solid #dddddd;
+      text-align: left;
+      padding: 8px;
+    }
+
+    tr:nth-child(even) {
+      background-color: #dddddd;
+    }
+  </style>
+<!-- Import in <head> or at the bottom of the page -->
+  <script src="/main.js"></script>
+
+</head>
+
+<body>
+
+
+  <div>
+    <h1>Hi <%=user.username%></h1>
+    <p>Role: <%=user.role%>
+    </p>
+    
+    <a href="/profile">Update Profile</a>
+    <br><br>
+    <a href="/logout">Logout</a>
+    <br>
+  </div>
+
+  <h2>Blogs</h2>
+  <a class="btn-add <%=user.role !=='admin' ? 'btn-disabled' : '' %>" href="<%=user.role !=='admin' ? '#' : '/blog/add' %>" 
+    >
+    Add
+  </a>
+  <hr/>
+
+  <table>
+    <tr>
+      <th>Title</th>
+      <th>Content</th>
+      <th>Author</th>
+      <th>Action</th>
+    </tr>
+    <% blogs.forEach(blog=> { %>
+      <tr>
+        <td>
+          <%= blog.title %>
+        </td>
+        <td>
+          <%= blog.content %>
+        </td>
+        <td>
+          <%= blog.author %>
+        </td>
+        <td>
+          <button class="btn-update" onclick="window.location.href='/blog/update?id=<%=blog._id%>'" <%=user.role !=='admin' ? 'disabled' : '' %>
+            >
+            update
+          </button>
+          <button class="btn-delete" data-id="<%= blog._id %>"  <%=user.role !=='admin' ? 'disabled' : '' %>
+            >
+            delete
+          </button>
+        </td>
+      </tr>
+      <% }); %>
+  </table>
+</body>
+
+</html>

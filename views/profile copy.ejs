@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><%= title %></title>
+</head>
+<body>
+
+    <a href="/blogs">Go back</a>
+    <hr/>
+    <form id="profileUpdateForm" action="/update-profile" method="POST">
+
+
+
+        <input type="hidden" name="user_id" value="<%=user._id%>" />
+        <h2>Update Your Profile: <%= user.username %></h2>
+    
+        <!-- Name Field -->
+        <label for="name">First Name:</label>
+        <input type="text" id="first_name" name="first_name" required minlength="3" maxlength="50" pattern="[A-Za-z\s]+" 
+            title="Name should be 3-50 alphabetic characters only" value="<%= user.first_name %>" />
+        <span id="nameError" class="error"></span>
+        <br/>
+                <!-- Name Field -->
+                <label for="name">Last Name:</label>
+                <input type="text" id="last_name" name="last_name" required minlength="3" maxlength="50" pattern="[A-Za-z\s]+" 
+                    title="Name should be 3-50 alphabetic characters only" value="<%= user.last_name %>" />
+                <span id="nameError2" class="error"></span>
+                <br/>
+        <!-- Email Field -->
+        <label for="email">Email:</label>
+        <input type="text" id="email" name="email" required 
+            title="Enter a valid email address" value="<%= user.email %>" />
+        <span id="emailError" class="error"></span>
+        <br/>
+        <!-- Bio Field -->
+        <label for="bio">Bio:</label>
+        <textarea id="bio" name="bio" rows="4" maxlength="500" 
+            placeholder="Tell us about yourself (Max 500 characters)"><%= user.bio %></textarea>
+        <span id="bioError" class="error"></span>
+        <br/>
+        <!-- Submit Button -->
+        <button type="submit">Update Profile</button>
+    </form>
+    
+    <!-- Client-side Validation Script -->
+    <script>
+
+console.log('<%= user.email %>')
+
+    document.getElementById('profileUpdateForm').addEventListener('submit', function(event) {
+        let isValid = true;
+    
+        // Name Validation
+        const name = document.getElementById('name').value;
+        if (!/^[A-Za-z\s]{3,50}$/.test(name)) {
+            document.getElementById('nameError').textContent = "Name must be 3-50 alphabetic characters.";
+            isValid = false;
+        } else {
+            document.getElementById('nameError').textContent = "";
+        }
+    
+        // Email Validation
+        const email = document.getElementById('email').value;
+        if (!/^\S+@\S+\.\S+$/.test(email)) {
+            document.getElementById('emailError').textContent = "Enter a valid email.";
+            isValid = false;
+        } else {
+            document.getElementById('emailError').textContent = "";
+        }
+    
+        // Bio Validation
+        const bio = document.getElementById('bio').value;
+        if (/[^a-zA-Z0-9\s.,!?]/.test(bio)) {
+            document.getElementById('bioError').textContent = "Bio contains invalid characters.";
+            isValid = false;
+        } else {
+            document.getElementById('bioError').textContent = "";
+        }
+    
+        if (!isValid) event.preventDefault();
+    });
+    
+    </script>
+</body>
+</html>
+
